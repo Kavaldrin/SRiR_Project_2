@@ -67,7 +67,8 @@ def save_res(options, tsp):
 
 
 def run_solver(options):
-    run_cmd = 'mpiexec -f ' + str(options['compute_nodes']) + ' -n ' + str(options['processes']) + ' ./main_program/antColonyTSPSolver ' + os.path.abspath(options['output'] + '.g')
+    nodes = sp.check_output(['upcxx-nodes', options['compute_nodes']], text=True)
+    run_cmd = 'upcxx-run -n ' + str(options['processes']) + ' ' + nodes  + ' ./main_program/antColonyTSPSolver ' + os.path.abspath(options['output'] + '.g')
     print('Running: ' + run_cmd)
     out = sp.check_output(shlex.split(run_cmd), text=True)
     print('---------- PROGRAM OUTPUT ----------')
