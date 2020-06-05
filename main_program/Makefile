@@ -1,4 +1,4 @@
-CXX = UPCXX_GASNET_CONDUIT=udp upcxx -O2
+CXX = UPCXX_GASNET_CONDUIT=udp upcxx
 
 # path #
 SRC_PATH = src
@@ -70,7 +70,7 @@ run: all prepareNodes
 # Creation of the executable
 $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
 	@echo "Linking: $@"
-	$(CXX) $(OBJECTS) -o $@ $(LIBS)
+	$(CXX) -O2 $(OBJECTS) -o $@ $(LIBS)
 
 # Add dependency files, if they exist
 -include $(DEPS)
