@@ -1,4 +1,4 @@
-CXX ?= g++
+CXX = UPCXX_GASNET_CONDUIT=udp upcxx -O2
 
 # path #
 SRC_PATH = src
@@ -24,11 +24,11 @@ CURRENT_DIR = $(shell pwd)
 
 # flags #
 COMPILE_FLAGS = -std=c++17 -Wall -pedantic-errors -Werror -O2
-INCLUDES = -I include/ -I /usr/local/include -I /opt/nfs/mpich-3.2/include
+INCLUDES = -I include/ -I /usr/local/include
 # Space-separated pkg-config libraries used by this project
 # It's my location of mpich, should be changed on uni machine
 #LIBS = /usr/lib/x86_64-linux-gnu/libmpich.so
-LIBS = /opt/nfs/mpich-3.2/lib/libmpich.so
+LIBS =
 # LIBS = 
 
 # checks the executable and symlinks to the output
@@ -63,7 +63,9 @@ prepareNodes:
 .PHONY: run
 run: all prepareNodes
 	@echo "Launching application"
-	@ /opt/nfs/mpich-3.2/bin/mpiexec -f $(CURRENT_DIR)/nodes -n $(shell cat $(CURRENT_DIR)/nodes | wc -l) $(CURRENT_DIR)/$(BIN_NAME) $(CURRENT_DIR)/../generated_graph.g
+	@upcxx-run -n $(shell cat $(CURRENT_DIR)/nodes | wc -l) $(shell upcxx-nodes nodes) $(CURRENT_DIR)/$(BIN_NAME) $(CURRENT_DIR)/../generated_graph.g 2>/dev/null
+
+# @/opt/nfs/mpich-3.2/bin/mpiexec -f $(CURRENT_DIR)/nodes -n $(shell cat $(CURRENT_DIR)/nodes | wc -l) $(CURRENT_DIR)/$(BIN_NAME) $(CURRENT_DIR)/../generated_graph.g
 
 # Creation of the executable
 $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
